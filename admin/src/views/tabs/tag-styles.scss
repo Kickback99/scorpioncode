@@ -1,0 +1,519 @@
+@keyframes schedule-in-width {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes schedule-out-width {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 0;
+  }
+}
+
+.tags-view {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  margin: 20px 0;
+  font-size: 14px;
+  color: var(--el-text-color-primary);
+  background-color: color-mix(in srgb, var(--el-bg-color) 85%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9;
+  // border-top: 1px solid var(--el-border-color-lighter);
+  // box-shadow: 0 0 1px #888;
+
+  .scroll-item {
+    position: relative;
+    display: inline-block;
+    padding: 4px 0;
+    padding-left: 4px;
+    cursor: pointer;
+    transition: color 0.15s ease-out;
+    box-shadow: 5px 0 5px -6px #ccc;
+
+    &:not(:first-child) {
+      padding-right: 4px;
+    }
+
+    .el-icon-close {
+      display: inline-flex;
+      vertical-align: middle;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      margin-left: 2px;
+      margin-top: 2px;
+      color: var(--el-color-primary-light-9) !important;
+      cursor: pointer;
+      border-radius: 4px;
+      transition:
+        background-color 0.12s,
+        color 0.12s;
+      opacity: 0; // 默认隐藏
+
+      &:hover {
+        color: var(--el-color-primary) !important;
+        background-color: rgb(0 0 0 / 6%);
+      }
+    }
+      // 鼠标移入时显示关闭按钮（仪表盘不显示关闭按钮）
+      &:hover:not(:first-child) .el-icon-close {
+        opacity: 1;
+      }
+
+        // 确保仪表盘不显示关闭按钮（通过路径判断）
+        &[data-path="/index"] .el-icon-close,
+        &:first-child .el-icon-close {
+          display: none !important;
+        }
+  }
+
+  .tag-title {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 2px;
+    color: var(--el-text-color-primary);
+    text-decoration: none;
+  }
+
+  .scroll-container {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+
+    .tab {
+      position: relative;
+      float: left;
+      overflow: visible;
+      white-space: nowrap;
+      list-style: none;
+      transition: transform 0.3s ease;
+
+      .scroll-item {
+        transition: color 0.15s ease-out;
+
+        &:nth-child(1) {
+          padding: 0 12px;
+        }
+      }
+    }
+  }
+
+  /* 右键菜单 */
+  .contextmenu {
+    position: absolute;
+    padding: 5px 0;
+    margin: 0;
+    font-size: 13px;
+    font-weight: normal;
+    color: var(--el-text-color-primary);
+    white-space: nowrap;
+    list-style-type: none;
+    background: var(--el-bg-color);
+    border-radius: 4px;
+    outline: 0;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+    z-index: 9999;
+
+    li {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 7px 12px;
+      margin: 0;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--el-color-primary);
+        background-color: var(--el-fill-color-light);
+      }
+
+      svg {
+        display: block;
+        margin-right: 0.5em;
+      }
+    }
+
+    /* full — hover 实心底色+文字色 */
+    .ui-full & li:hover {
+      color: var(--el-color-primary-text);
+      background-color: var(--el-color-primary-solid-bg);
+    }
+
+    /* plain — hover 浅底色+主色字 */
+    .ui-plain & li:hover {
+      color: var(--el-color-primary-plain);
+      background-color: var(--el-color-primary-plain-bg);
+    }
+  }
+}
+
+.scroll-item.is-active {
+  position: relative;
+  color: var(--el-color-primary);
+  box-shadow: 0 0 0.7px #888;
+
+  .tag-title {
+    color: var(--el-color-primary) !important;
+  }
+
+  .el-icon-close {
+    color: var(--el-color-primary);
+    opacity: 1 !important;
+    &[data-path="/index"] {
+      display: none !important;
+    }
+  }
+
+  /* full 模式 — 背景填充 + hover 跟随 uiDepth / hoverFull */
+  .ui-full & {
+    color: var(--el-color-primary-text);
+    background-color: var(--tab-active-bg);
+    .tag-title { color: var(--el-color-primary-text) !important; }
+    &:hover { background-color: var(--tab-active-hover-bg); }
+    .el-icon-close {
+      color: var(--el-color-primary-text) !important;
+      &:hover { background-color: var(--tab-active-hover-bg); }
+    }
+  }
+
+  /* plain 模式 — 描边 + 极浅底色 + hover 填满主色 */
+  .ui-plain & {
+    color: var(--el-color-primary-plain);
+    background-color: var(--el-color-primary-plain-bg);
+    border: 1px solid var(--el-color-primary-plain);
+    border-radius: 4px;
+    box-shadow: none;
+    .tag-title { color: var(--el-color-primary-plain) !important; }
+    .el-icon-close { color: var(--el-color-primary-plain) !important; }
+    &:hover {
+      color: var(--el-color-primary-text);
+      background-color: var(--tab-active-hover-plain-bg);
+      .tag-title { color: var(--el-color-primary-text) !important; }
+      .el-icon-close { color: var(--el-color-primary-text) !important; }
+    }
+  }
+}
+   /* 灵动模式 — ui 模式下未激活标签 hover 跟随 full/plain 差异化
+   ============================================================ */
+// 未激活标签 hover — 对齐激活标签默认样式（排除 tag-mode-neutral/theme）
+	.dynamic-mode.ui-full .tags-view:not(.tag-mode-neutral):not(.tag-mode-theme) .scroll-item:not(.is-active):hover {
+	  color: var(--el-color-primary-text);
+	  background-color: var(--tab-active-bg);
+	  .tag-title { color: var(--el-color-primary-text) !important; }
+	  .el-icon-close { color: var(--el-color-primary-text) !important; }
+	}
+	.dynamic-mode.ui-plain .tags-view:not(.tag-mode-neutral):not(.tag-mode-theme) .scroll-item:not(.is-active):hover {
+	  color: var(--el-color-primary-plain);
+	  background-color: var(--el-color-primary-plain-bg);
+	  border-radius: 4px;
+	  .tag-title { color: var(--el-color-primary-plain) !important; }
+	  .el-icon-close { color: var(--el-color-primary-plain) !important; }
+	}
+
+
+
+.arrow-left,
+.arrow-right,
+.arrow-down {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 30px;
+  color: var(--el-text-color-primary);
+  cursor: pointer;
+  background: var(--el-bg-color);
+
+  &:hover {
+    color: var(--el-color-primary);
+    background-color: var(--el-fill-color-light);
+  }
+
+  /* full — hover 实心底色+文字色 */
+  .ui-full &:hover {
+    color: var(--el-color-primary-text);
+    background-color: var(--el-color-primary-solid-bg);
+  }
+
+  /* plain — hover 浅底色+主色字 */
+  .ui-plain &:hover {
+    color: var(--el-color-primary-plain);
+    background-color: var(--el-color-primary-plain-bg);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.arrow-left {
+  box-shadow: 5px 0 5px -6px #ccc;
+}
+
+.arrow-right {
+  box-shadow: -5px 0 5px -6px #ccc;
+}
+
+.arrow-down {
+  box-shadow: -5px 0 5px -6px #ccc;
+}
+
+/* 灵动模式 */
+.schedule-active {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--el-color-primary);
+}
+
+/* 灵动模式下鼠标移入显示蓝色进度条 */
+.schedule-in {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--el-color-primary);
+  animation: schedule-in-width 200ms ease-in;
+}
+
+/* 灵动模式下鼠标移出隐藏蓝色进度条 */
+.schedule-out {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--el-color-primary);
+  animation: schedule-out-width 200ms ease-in;
+}
+
+/* ============================================================
+   tag-mode-neutral — 中性色（浅底色+主色字，忽略 ui-full/ui-plain）
+   ============================================================ */
+
+/* 激活标签 */
+.tags-view.tag-mode-neutral .scroll-item.is-active {
+  color: var(--el-color-primary);
+  background-color: var(--el-fill-color-light);
+  border: none;
+  border-radius: 4px;
+  box-shadow: none;
+
+  .tag-title { color: var(--el-color-primary) !important; }
+  .el-icon-close { color: var(--el-color-primary) !important; }
+
+  &:hover {
+    background-color: var(--el-fill-color);
+    .el-icon-close { color: var(--el-color-primary) !important; }
+  }
+}
+
+/* 左/右/下箭头 hover */
+.tags-view.tag-mode-neutral .arrow-left:hover,
+.tags-view.tag-mode-neutral .arrow-right:hover,
+.tags-view.tag-mode-neutral .arrow-down:hover {
+  color: var(--el-color-primary);
+  background-color: var(--el-fill-color-light);
+}
+
+/* 右键菜单 */
+.tags-view.tag-mode-neutral .contextmenu li:hover {
+  color: var(--el-color-primary);
+  background-color: var(--el-fill-color-light);
+}
+
+/* 下箭头下拉选项（teleported） */
+.tag-mode-neutral-dropdown .el-dropdown-menu__item:hover {
+  color: var(--el-color-primary) !important;
+  background-color: var(--el-fill-color-light) !important;
+}
+
+/* 激活标签 */
+.tags-view.tag-mode-neutral .scroll-item.is-active {
+  color: var(--el-color-primary);
+  background-color: var(--el-fill-color-light);
+  border: none;
+  border-radius: 4px;
+  box-shadow: none;
+
+  .tag-title { color: var(--el-color-primary) !important; }
+  .el-icon-close { color: var(--el-color-primary) !important; }
+
+  &:hover {
+    background-color: var(--el-fill-color);
+    .el-icon-close { color: var(--el-color-primary) !important; }
+  }
+}
+
+/* 左/右/下箭头 hover */
+.tags-view.tag-mode-neutral .arrow-left:hover,
+.tags-view.tag-mode-neutral .arrow-right:hover,
+.tags-view.tag-mode-neutral .arrow-down:hover {
+  color: var(--el-color-primary);
+  background-color: var(--el-fill-color-light);
+}
+
+/* 右键菜单 */
+.tags-view.tag-mode-neutral .contextmenu li:hover {
+  color: var(--el-color-primary);
+  background-color: var(--el-fill-color-light);
+}
+
+/* 下箭头下拉选项（teleported，主题的 injectDropdownCss 特异性 4 级，此处用 5 级覆盖） */
+.el-popper.tag-mode-neutral-dropdown .el-dropdown-menu .el-dropdown-menu__item:hover,
+.el-popper.tag-mode-neutral-dropdown .el-dropdown-menu .el-dropdown-menu__item:focus,
+.el-popper.tag-mode-neutral-dropdown .el-dropdown-menu .el-dropdown-menu__item.is-active {
+  color: var(--el-color-primary) !important;
+  background-color: var(--el-fill-color-light) !important;
+}
+
+/* ============================================================
+   tag-mode-theme — 主题色深底风格（不受 uiMode 影响，统一处理）
+   ============================================================ */
+
+/* 底色 */
+.tags-view.tag-mode-theme {
+  background-color: var(--tab-theme-bg);
+}
+
+/* 激活标签（保持主色，不受 uiMode 影响） */
+.tags-view.tag-mode-theme .scroll-item.is-active {
+  color: var(--el-color-primary);
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  box-shadow: none;
+
+  .tag-title { color: var(--el-color-primary) !important; }
+  .el-icon-close { color: var(--el-color-primary) !important; }
+
+  &:hover {
+    background-color: var(--tab-theme-hover-bg);
+    .el-icon-close {
+      color: var(--el-color-primary) !important;
+      background-color: transparent !important;
+    }
+  }
+}
+
+/* 普通标签 */
+.tags-view.tag-mode-theme .scroll-item:not(.is-active) {
+  .tag-title { color: var(--sidebar-text); }
+  .el-icon-close { color: var(--sidebar-text) !important; }
+
+  &:hover {
+    background-color: var(--tab-theme-hover-bg);
+    .tag-title { color: var(--sidebar-text); }
+    .el-icon-close { color: var(--sidebar-text) !important; }
+  }
+}
+
+/* 灵动模式 — full/plain hover 文字差异化（平铺避免 SCSS & 编译错位） */
+.dynamic-mode.ui-full .tags-view.tag-mode-theme .scroll-item:not(.is-active):hover {
+  .tag-title { color: var(--el-color-white); }
+  .el-icon-close {
+    color: var(--el-color-white) !important;
+    background-color: transparent !important;
+  }
+}
+
+.dynamic-mode.ui-plain .tags-view.tag-mode-theme .scroll-item:not(.is-active):hover {
+  .tag-title { color: var(--el-color-primary-plain); }
+  .el-icon-close {
+    color: var(--el-color-primary-plain) !important;
+    background-color: transparent !important;
+  }
+}
+
+/* 左/右/下箭头 */
+.tags-view.tag-mode-theme .arrow-left,
+.tags-view.tag-mode-theme .arrow-right,
+.tags-view.tag-mode-theme .arrow-down {
+  color: var(--sidebar-text);
+  background: var(--tab-theme-bg);
+
+  &:hover {
+    background-color: var(--tab-theme-hover-bg);
+  }
+}
+
+/* 灵动模式 — 箭头 hover 颜色 */
+.dynamic-mode.ui-full .tags-view.tag-mode-theme .arrow-left:hover,
+.dynamic-mode.ui-full .tags-view.tag-mode-theme .arrow-right:hover,
+.dynamic-mode.ui-full .tags-view.tag-mode-theme .arrow-down:hover {
+  color: var(--el-color-white);
+}
+.dynamic-mode.ui-plain .tags-view.tag-mode-theme .arrow-left:hover,
+.dynamic-mode.ui-plain .tags-view.tag-mode-theme .arrow-right:hover,
+.dynamic-mode.ui-plain .tags-view.tag-mode-theme .arrow-down:hover {
+  color: var(--el-color-primary-plain);
+}
+
+/* 右键菜单 */
+.tags-view.tag-mode-theme .contextmenu {
+  background: var(--tab-theme-bg);
+  color: var(--sidebar-text);
+}
+
+/* 灵动模式 — 右键菜单 hover */
+.dynamic-mode.ui-full .tags-view.tag-mode-theme .contextmenu li:hover {
+  color: var(--el-color-primary-text);
+  background-color: var(--el-color-primary-solid-bg);
+}
+.dynamic-mode.ui-plain .tags-view.tag-mode-theme .contextmenu li:hover {
+  color: var(--el-color-primary-plain);
+  background-color: var(--tab-theme-hover-bg);
+}
+
+/* 下箭头下拉选项（teleported） */
+/* 灵动模式 — 下拉选项 */
+.dynamic-mode.el-popper.tag-mode-theme-dropdown,
+.dynamic-mode.el-popper.tag-mode-theme-dropdown .el-dropdown-menu {
+  background-color: var(--tab-theme-bg) !important;
+}
+.dynamic-mode.el-popper.tag-mode-theme-dropdown .el-dropdown-menu .el-dropdown-menu__item {
+  color: var(--sidebar-text) !important;
+  background-color: var(--tab-theme-bg) !important;
+}
+.dynamic-mode.ui-full .el-popper.tag-mode-theme-dropdown .el-dropdown-menu .el-dropdown-menu__item:hover,
+.dynamic-mode.ui-full .el-popper.tag-mode-theme-dropdown .el-dropdown-menu .el-dropdown-menu__item:focus,
+.dynamic-mode.ui-full .el-popper.tag-mode-theme-dropdown .el-dropdown-menu .el-dropdown-menu__item.is-active {
+  color: var(--el-color-primary-text) !important;
+  background-color: var(--el-color-primary-solid-bg) !important;
+}
+.dynamic-mode.ui-plain .el-popper.tag-mode-theme-dropdown .el-dropdown-menu .el-dropdown-menu__item:hover,
+.dynamic-mode.ui-plain .el-popper.tag-mode-theme-dropdown .el-dropdown-menu .el-dropdown-menu__item:focus,
+.dynamic-mode.ui-plain .el-popper.tag-mode-theme-dropdown .el-dropdown-menu .el-dropdown-menu__item.is-active {
+  color: var(--el-color-primary-plain) !important;
+  background-color: var(--tab-theme-hover-bg) !important;
+}
+
+/* 下箭头下拉选项（teleported，主题的 injectDropdownCss 特异性 4 级，此处用 5 级覆盖） */
+.el-popper.tag-mode-theme-dropdown,
+.el-popper.tag-mode-theme-dropdown .el-dropdown-menu {
+  background-color: var(--tab-theme-bg) !important;
+}
+.el-popper.tag-mode-theme-dropdown .el-dropdown-menu .el-dropdown-menu__item {
+  color: var(--sidebar-text) !important;
+  background-color: var(--tab-theme-bg) !important;
+}

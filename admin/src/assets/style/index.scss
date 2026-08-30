@@ -1,0 +1,224 @@
+@import './reset.scss';
+
+// ============================================================
+// nprogress 进度条 — 跟随主题色
+// ============================================================
+#nprogress .bar {
+  background: var(--el-color-primary) !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--el-color-primary), 0 0 5px var(--el-color-primary) !important;
+}
+
+// ============================================================
+// 全局滚动条 — 跟随主题色
+// ============================================================
+
+// Element Plus el-scrollbar
+.el-scrollbar__bar.is-vertical .el-scrollbar__thumb {
+  width: 4px;
+}
+.el-scrollbar__bar.is-horizontal .el-scrollbar__thumb {
+  height: 4px;
+}
+.el-scrollbar__thumb {
+  background-color: var(--el-color-primary-light-5) !important;
+}
+.el-scrollbar__thumb:hover {
+  background-color: var(--el-color-primary) !important;
+}
+
+// 原生 WebKit 滚动条
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--el-color-primary-light-5);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--el-color-primary);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+// ============================================================
+// config 模块内部滚动条 — 模拟 el-scrollbar 透明度
+// ============================================================
+.config-body::-webkit-scrollbar,
+.cs-content::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.config-body::-webkit-scrollbar-thumb,
+.cs-content::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--el-color-primary-light-5) 35%, transparent);
+  border-radius: 2px;
+}
+.config-body::-webkit-scrollbar-thumb:hover,
+.cs-content::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--el-color-primary) 50%, transparent);
+}
+.config-body::-webkit-scrollbar-track,
+.cs-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+// ============================================================
+// 浅色模式 pagination 输入框/选择器/页码/翻页按钮背景统一为 fill-color-light
+// ============================================================
+html:not(.dark) {
+  .el-pagination:not(.notice-pagination .el-pagination) {
+    .el-input__wrapper,
+    .el-pager li,
+    .btn-prev,
+    .btn-next,
+    .btn-prev:disabled,
+    .btn-next:disabled {
+      background-color: var(--el-fill-color-light);
+    }
+  }
+}
+
+// ============================================================
+// 深色模式 pagination 输入框/选择器/页码/翻页按钮背景统一为 fill-light
+// ============================================================
+html:not(.light) {
+  .el-pagination:not(.notice-pagination .el-pagination) {
+    .el-input__wrapper,
+    .el-pager li,
+    .btn-prev,
+    .btn-next,
+    .btn-prev:disabled,
+    .btn-next:disabled {
+      background-color: var(--el-fill-light);
+    }
+  }
+}
+
+// ============================================================
+// config 模块使用内部滚动，隐藏外层 el-scrollbar
+// ============================================================
+.el-scrollbar__wrap:has(.config-page) {
+  overflow: hidden;
+}
+
+// el-tag 全局关闭过渡动画
+.el-tag {
+  transition: none !important;
+}
+
+// ============================================================
+// el-tree 悬浮边框 — 跟随连接线样式类
+// ============================================================
+.tree-line-solid .el-tree-node__content:not(:has(.el-input)):hover {
+  outline: 1px solid var(--el-color-primary);
+  outline-offset: -1px;
+  border-radius: 4px;
+}
+.tree-line-dashed .el-tree-node__content:not(:has(.el-input)):hover {
+  outline: 1px dashed var(--el-color-primary);
+  outline-offset: -1px;
+  border-radius: 4px;
+}
+
+// 去除 el-tree 默认背景（跟随父容器）
+// 悬浮背景 全局背景跟随（深浅 / pageTheme 自适应）
+.el-tree{
+  background-color: transparent !important;
+  --el-tree-node-hover-bg-color: var(--el-fill-color-light) !important;
+}
+html.dark .el-tree:not(.page-theme) {
+ --el-tree-node-hover-bg-color: var(--el-color-black) !important;
+}
+.el-tree.page-theme{
+  --el-tree-node-hover-bg-color: var(--page-theme-bg) !important;
+}
+.el-tree-node__content:hover {
+  background-color: var(--el-tree-node-hover-bg-color) !important;
+}
+
+// auth-header 全局背景跟随（深浅 / pageTheme 自适应）
+.auth-header {
+  background-color: var(--el-fill-color-light);
+}
+html.dark .auth-header:not(.page-theme) {
+  background-color: var(--el-color-black);
+}
+.auth-header.page-theme {
+  background-color: var(--page-theme-bg);
+}
+
+// 精准排它：鼠标离开后清除残留背景（:focus / is-current），悬浮时保留
+// 子节点悬浮时，父节点也清除背景 — 避免鼠标穿过父到子时残留
+.el-tree-node:focus:not(:hover) > .el-tree-node__content,
+.el-tree-node.is-current:not(:hover) > .el-tree-node__content,
+.el-tree-node:has(.el-tree-node__content:hover) > .el-tree-node__content:not(:hover) {
+  background-color: transparent !important;
+  outline: none !important;
+}
+
+// 编辑态 input 边框跟随
+.tree-line-solid .el-tree-node__content .el-input__wrapper {
+  box-shadow: 0 0 0 1px var(--el-color-primary) inset;
+  border: 1px solid var(--el-color-primary);
+}
+.tree-line-dashed .el-tree-node__content .el-input__wrapper {
+  box-shadow: none !important;
+  border: 1px dashed var(--el-color-primary);
+}
+
+// ============================================================
+// radio / radio-button — 图标与文字垂直居中
+// ============================================================
+.el-radio-button__inner {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.el-radio .el-radio__label {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+// 对象模式消息图标对齐第一行（适配多行 HTML）
+.msg-icon-top {
+  align-items: flex-start !important;
+  /* .el-message__icon {
+    margin-top: 2px;
+  } */
+}
+
+// MessageBox 弹窗按钮统一 small 尺寸
+.el-message-box__btns .el-button {
+  height: 24px;
+  font-size: var(--el-font-size-small);
+  padding: 5px 11px;
+}
+
+// ============================================================
+// 搜索面板折叠条 — 透明背景、图标居中、保持最低高度
+// ============================================================
+.el-collapse.search-collapse {
+  --el-collapse-header-bg-color: transparent;
+  --el-collapse-content-bg-color: transparent;
+  border: none;
+}
+.el-collapse.search-collapse .el-collapse-item__header {
+  min-height: 26px;
+  justify-content: center;
+}
+.el-collapse.search-collapse .el-collapse-item__title {
+  flex: none;
+}
+.el-collapse.search-collapse .el-collapse-item__arrow {
+  margin-top: -20px !important;
+  transform: rotate(90deg) !important;
+}
+.el-collapse.search-collapse .el-collapse-item__arrow.is-active {
+  transform: rotate(-90deg) !important;
+}

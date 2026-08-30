@@ -1,0 +1,53 @@
+{
+  "name": "scorpion-dashboard",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:cookie": "vite --mode local-cookie",
+    "build": "vite build",
+    "build:test": "vite build --mode test",
+    "build:prod": "vite build --mode production",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "@kangc/v-md-editor": "^2.3.18",
+    "axios": "^1.6.5",
+    "cronstrue": "^3.14.0",
+    "crypto-js": "^4.2.0",
+    "echarts": "^6.1.0",
+    "element-plus": "^2.11.1",
+    "mitt": "^3.0.1",
+    "nprogress": "^0.2.0",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
+    "pinyin-match": "^1.2.10",
+    "vite-plugin-prismjs": "^0.0.11",
+    "vue": "^3.3.11",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@iconify-icons/ant-design": "^1.2.7",
+    "@iconify-icons/ep": "^1.2.12",
+    "@iconify-json/ant-design": "^1.2.1",
+    "@iconify-json/ep": "^1.2.0",
+    "@iconify-json/fa-solid": "^1.2.0",
+    "@iconify-json/ri": "^1.2.2",
+    "@iconify/vue": "^4.1.2",
+    "@pureadmin/utils": "^2.4.8",
+    "@vitejs/plugin-vue": "^4.5.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "sass": "^1.70.0",
+    "tailwindcss": "^3.4.14",
+    "terser": "^5.50.0",
+    "unplugin-auto-import": "^0.18.3",
+    "unplugin-icons": "^0.19.3",
+    "unplugin-vue-components": "^0.27.4",
+    "vite": "^5.0.10",
+    "vite-plugin-svg-icons": "^2.0.1",
+    "vite-svg-loader": "^5.1.0"
+  }
+}
