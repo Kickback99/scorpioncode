@@ -1,0 +1,31 @@
+// src/assets/styles/variables.scss
+@use 'vuetify/settings' with (
+  // 覆盖全局圆角（影响按钮、输入框等）
+  $border-radius-root: 8px,
+
+  // 覆盖文本字段样式
+  $text-field-border-radius: 4px,
+  
+  // 覆盖主色（需同时修改主题配置）
+  $color-pack: true, // 禁用预设颜色类
+  $body-font-family: 'Roboto, sans-serif',  
+  // 其他卡片样式
+  $card-border-radius: 5px,
+//   $card-title-padding: 7px,
+//   $card-text-padding: 7px,
+  // $card-elevation: 20  // 阴影深度（0-24）
+);
+
+// 强制覆盖卡片标题样式（跳过 typography 系统）
+:root {
+  --v-card-title-font-size: 4rem !important;
+}
+
+// 必须用深层选择器穿透 Vuetify 的 scoped style
+/* .v-card-title {
+  // font-size: var(--v-card-title-font-size) !important;
+  // font-weight: 600 !important;
+} */
+
+
+
