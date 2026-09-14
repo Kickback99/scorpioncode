@@ -1,0 +1,193 @@
+// ============================================================
+// v-md-editor Markdown 预览公共样式
+// 被 AppDetail / AppNoticeDialog 等组件共用（main.js 全局引入）
+// 改这里一处，所有用到 Markdown 预览的组件同步生效
+// 组件自身特有样式仍写在各自的 <style> 里
+// ============================================================
+
+// 代码块语法高亮配色单独成文件，按语义角色分深浅成对维护
+@use './markdown-highlight';
+
+// ===== vuepress 主题：深色 =====
+.v-md-editor-preview.user-dark .vuepress-markdown-body {
+  background: var(--v-theme-surface);
+  color: #fff;
+  code:not(pre code) {
+    background-color: rgb(var(--v-theme-surface-variant), 0.7) !important;
+    color: rgb(var(--v-theme-on-primary)) !important;
+  }
+
+  // 代码块：容器背景 + 文字
+  div[class*='v-md-pre-wrapper-'] {
+    background-color: rgb(var(--v-theme-surface-variant)) !important;
+  }
+  pre code {
+    color: rgb(var(--v-theme-on-surface)) !important;
+  }
+
+  // 行号：背景 + 文字
+  div[class*='v-md-pre-wrapper-'].line-numbers-mode::after {
+    background-color: rgb(var(--v-theme-surface-variant)) !important;
+    border-right-color: rgb(var(--v-theme-on-surface), 0.15);
+  }
+  div[class*='v-md-pre-wrapper-'].line-numbers-mode .line-numbers-wrapper {
+    color: rgb(var(--v-theme-on-surface-variant)) !important;
+  }
+
+  // 表格：背景、文字、边框
+  table {
+    tr {
+      background-color: rgb(var(--v-theme-surface)) !important;
+      color: rgb(var(--v-theme-on-surface));
+      border-top-color: rgb(var(--v-theme-on-surface), 0.15);
+    }
+    tr:nth-child(2n) {
+      background-color: rgb(var(--v-theme-surface-variant)) !important;
+    }
+    th, td {
+      border-color: rgb(var(--v-theme-on-surface), 0.15);
+    }
+  }
+}
+
+// ===== vuepress 主题：浅色 =====
+.v-md-editor-preview.user-light .vuepress-markdown-body {
+  background: var(--v-theme-surface);
+  color: #000;
+  code:not(pre code) {
+    background-color: rgb(var(--v-theme-surface-variant), 0.5) !important;
+    color: rgb(var(--v-theme-on-surface-variant)) !important;
+  }
+
+  // 代码块：容器背景 + 文字
+  div[class*='v-md-pre-wrapper-'] {
+    background-color: rgb(var(--v-theme-surface-variant)) !important;
+  }
+  pre code {
+    color: rgb(var(--v-theme-on-surface)) !important;
+  }
+
+  // 行号：背景 + 文字
+  div[class*='v-md-pre-wrapper-'].line-numbers-mode::after {
+    background-color: rgb(var(--v-theme-surface-variant)) !important;
+    border-right-color: rgb(var(--v-theme-on-surface), 0.15);
+  }
+  div[class*='v-md-pre-wrapper-'].line-numbers-mode .line-numbers-wrapper {
+    color: rgb(var(--v-theme-on-surface-variant)) !important;
+  }
+
+  // Prism 语法高亮：浅色配色（覆盖 prism-tomorrow 深色配色）
+  .token.comment, .token.cdata, .token.doctype, .token.prolog, .token.block-comment {
+    color: #708090;
+  }
+  .token.punctuation {
+    color: #999;
+  }
+  .token.tag, .token.attr-name, .token.namespace, .token.deleted {
+    color: #905;
+  }
+  .token.function-name {
+    color: #07a;
+  }
+  .token.boolean, .token.function, .token.number {
+    color: #c76b29;
+  }
+  .token.class-name, .token.constant, .token.property, .token.symbol {
+    color: #905;
+  }
+  .token.atrule, .token.builtin, .token.important, .token.keyword, .token.selector {
+    color: #07a;
+  }
+  .token.attr-value, .token.char, .token.regex, .token.string, .token.variable {
+    color: #690;
+  }
+  .token.entity, .token.operator, .token.url {
+    color: #9a6e3a;
+  }
+
+  // 表格：背景、文字、边框
+  table {
+    tr {
+      background-color: rgb(var(--v-theme-surface)) !important;
+      color: rgb(var(--v-theme-on-surface));
+      border-top-color: rgb(var(--v-theme-on-surface), 0.15);
+    }
+    tr:nth-child(2n) {
+      background-color: rgb(var(--v-theme-surface-variant)) !important;
+    }
+    th, td {
+      border-color: rgb(var(--v-theme-on-surface), 0.15);
+    }
+  }
+}
+
+// ===== github 主题：浅色 =====
+.v-md-editor-preview.user-light .github-markdown-body {
+  code:not(pre code) {
+    background-color: rgb(var(--v-theme-surface-variant), 0.7) !important;
+    color: rgb(var(--v-theme-primary)) !important;
+  }
+}
+
+// ===== github 主题：深色适配（代码块/行号/表格/行内代码） =====
+// 语法高亮见 markdown-highlight.scss
+.v-md-editor-preview.user-dark .github-markdown-body {
+  // 行内代码 `xxx`
+  code:not(pre code) {
+    background-color: rgb(var(--v-theme-surface-variant)) !important;
+    color: rgb(var(--v-theme-on-surface-variant)) !important;
+  }
+
+  // 表格：背景、文字、边框
+  table {
+    tr {
+      background-color: rgb(var(--v-theme-surface)) !important;
+      color: rgb(var(--v-theme-on-surface));
+      border-top-color: rgb(var(--v-theme-on-surface), 0.15);
+    }
+    tr:nth-child(2n) {
+      background-color: rgb(var(--v-theme-surface-variant)) !important;
+    }
+    th, td {
+      border-color: rgb(var(--v-theme-on-surface), 0.15);
+    }
+  }
+
+  // 代码块：容器背景
+  div[class*='v-md-pre-wrapper-'] {
+    background-color: rgb(var(--v-theme-surface-variant)) !important;
+  }
+  // 代码块：普通文字
+  pre code {
+    color: rgb(var(--v-theme-on-surface)) !important;
+  }
+
+  // 行号：背景 + 文字
+  div[class*='v-md-pre-wrapper-'].line-numbers-mode::after {
+    background-color: rgb(var(--v-theme-surface-variant)) !important;
+    border-right-color: rgb(var(--v-theme-on-surface), 0.15);
+  }
+  div[class*='v-md-pre-wrapper-'].line-numbers-mode .line-numbers-wrapper {
+    color: rgb(var(--v-theme-on-surface-variant)) !important;
+  }
+}
+
+// ===== 代码块复制按钮 =====
+.v-md-copy-code-btn {
+  background-color: rgb(var(--v-theme-primary), 0.7) !important;
+}
+.v-md-copy-code-btn.copied svg {
+  display: none;
+}
+.v-md-copy-code-btn.copied::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 8px;
+  height: 14px;
+  border-right: 2.5px solid rgb(var(--v-theme-on-primary));
+  border-bottom: 2.5px solid rgb(var(--v-theme-on-primary));
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: 1px;
+}
