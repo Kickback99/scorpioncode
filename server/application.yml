@@ -20,11 +20,6 @@ scorpion:
     mode: jwt
     cookie-secure: false # 仅 HTTPS 部署时置 true，http 下开启会导致浏览器拒收 cookie
 
-  # 文件存储配置
-  file:
-    url: http://localhost:8800/resource/file/download/
-    path: /home/upload
-
   # 阿里云 OSS 配置（可选）
   aliyun:
     endpoint: ""
