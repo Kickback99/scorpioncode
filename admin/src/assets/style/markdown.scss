@@ -1,0 +1,143 @@
+// ============================================================
+// v-md-editor 公共样式（编辑器 + 预览）
+// 供 Markdown.vue（编辑器）/ notice/list.vue（公告详情）/ NoticeBell.vue / article/list.vue 共用
+// main.js 全局引入，改这里一处所有组件同步
+// 组件自身特有样式仍写在各自的 <style> 里
+// ============================================================
+
+// ============ 编辑器（Markdown.vue）============
+
+// 深色模式变量
+.dark-mode {
+  --editor-bg: #000;
+  --editor-text: #fff;
+  --toolbar-bg: #000;
+  --toolbar-text: #ccc;
+}
+
+// 编辑器整体/编辑区背景（深色）
+.dark-mode .v-md-editor {
+  background-color: #000 !important;
+}
+.dark-mode .v-md-editor__editor-wrapper {
+  background-color: #000 !important;
+}
+
+// 工具栏
+.v-md-editor__right-area .v-md-editor__toolbar {
+  background-color: var(--toolbar-bg) !important;
+  color: var(--toolbar-text) !important;
+
+  .v-md-editor__toolbar-left-wrapper li {
+    color: var(--toolbar-text) !important;
+  }
+  .v-md-editor__toolbar-item:hover {
+    color: var(--toolbar-text) !important;
+    background-color: var(--el-fill-color-light) !important;
+  }
+}
+
+// 工具栏下拉菜单（标题/插入图片）
+.dark-mode .v-md-editor__menu {
+  background-color: var(--el-bg-color-overlay) !important;
+}
+.dark-mode .v-md-editor__menu-item:hover {
+  background-color: var(--el-fill-color-light) !important;
+}
+// 工具栏激活态（如标题 H）
+.dark-mode .v-md-editor__toolbar-item--active,
+.dark-mode .v-md-editor__toolbar-item--active:hover {
+  background-color: var(--el-fill-color-light) !important;
+  color: var(--toolbar-text) !important;
+}
+
+// 工具提示
+.v-md-editor__tooltip {
+  background-color: var(--el-bg-color-overlay) !important;
+  color: var(--el-text-color-primary) !important;
+}
+
+// 编辑器文本域
+.v-md-editor__editor-wrapper textarea {
+  background-color: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+}
+
+// 目录导航
+.v-md-editor__left-area {
+  .v-md-editor__left-area-title {
+    color: var(--el-text-color-primary) !important;
+  }
+  .v-md-editor__left-area-body .v-md-editor__toc-nav li.v-md-editor__toc-nav-item {
+    color: var(--el-text-color-primary) !important;
+  }
+}
+
+// ============ 预览（所有组件）============
+
+// 深色模式下 vuepress 预览背景
+.dark-mode {
+  .v-md-editor__preview-wrapper {
+    background: var(--el-bg-color) !important;
+  }
+  .vuepress-markdown-body {
+    color: #fff;
+    background: var(--el-bg-color) !important;
+  }
+}
+
+// 预览容器去内边距（仅 detail-panel，不污染 Markdown.vue 编辑器）
+.detail-panel {
+  .github-markdown-body,
+  .vuepress-markdown-body {
+    padding: 0 !important;
+  }
+}
+
+// vuepress 代码高亮
+.vuepress-markdown-body code {
+  color: $code-color !important;
+
+  .token .operator {
+    background-color: transparent !important;
+  }
+  .token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string {
+    background-color: transparent !important;
+  }
+}
+
+// vuepress 表格：深色适配（修复行内代码 `xxx` 在浅色斑马纹上反色）
+.vuepress-markdown-body table {
+  tr {
+    background-color: var(--el-bg-color) !important;
+    color: var(--el-text-color-primary);
+    border-top-color: var(--el-border-color-lighter);
+  }
+  tr:nth-child(2n) {
+    background-color: var(--el-fill-color-light) !important;
+  }
+  th, td {
+    border-color: var(--el-border-color-lighter);
+  }
+  code:not(pre code) {
+      background-color: (var(--el-fill-color-light)) !important;
+      color: rgb(var(--el-border-color-lighte)) !important;
+  }
+}
+
+// 复制按钮（复制成功 ✓）
+.v-md-copy-code-btn.copied svg {
+  display: none;
+}
+.v-md-copy-code-btn.copied::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 8px;
+  height: 14px;
+  border-right: 2.5px solid var(--el-color-white);
+  border-bottom: 2.5px solid var(--el-color-white);
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-radius: 1px;
+}
