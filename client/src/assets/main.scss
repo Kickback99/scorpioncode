@@ -1,0 +1,165 @@
+html, body {
+  overflow-x: clip;
+  touch-action: pan-y;
+}
+
+/* fade-slide */
+.fade-slide-leave-active,
+.fade-slide-enter-active {
+  transition: all 0.3s;
+}
+
+.fade-slide-enter-from {
+  transform: translateX(-30px);
+  opacity: 0;
+}
+
+.fade-slide-leave-to {
+  transform: translateX(30px);
+  opacity: 0;
+}
+
+// 等宽代码字体回退链（!important 必要：覆盖 v-md-editor 主题 CSS 更高优先级的选择器）
+// 末尾接全站中文栈：上面的等宽字体都没有中文字形，不接会落到 generic monospace（Windows 上是宋体），与全站中文不一致
+.v-md-editor-preview {
+  pre, code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', 'Consolas', 'Courier New', 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', monospace !important;
+    // 连字（=> != 等）：JetBrains Mono 的连字在 calt 特性里（GSUB 无 liga），故用规范属性 contextual
+    font-variant-ligatures: contextual;
+  }
+}
+
+/* ========== 全局滚动条：跟随主题色（--scrollbar-thumb-color 由 theme store 同步） ==========
+ * 标准属性必须限定给「不支持 ::-webkit-scrollbar 的 Firefox」：
+ * Chromium 下元素上只要 scrollbar-width / scrollbar-color 非 auto，就会整体忽略 ::-webkit-scrollbar，
+ * 而 scrollbar-color 是可继承属性——设在 html/body 上会一路传给所有后代，
+ * 使代码块等内部滚动条退回默认 15px（横向尤其明显）。 */
+@supports not selector(::-webkit-scrollbar) {
+  html, body {
+    // Firefox：webkit 伪元素不可用，只能走标准属性
+    // 第二个颜色是底槽，与下方 ::-webkit-scrollbar-track 保持一致，改底槽两处一起改
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-color, #999) rgb(var(--v-theme-surface));
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* 滚动条底槽（轨道）颜色 —— 想改底槽颜色改这一处即可（竖向、横向共用这条规则）
+ * 用 surface 而非 on-surface：on-surface 是「与表面对比」的色，浅色主题下近黑、深色主题下近白，
+ * 底槽会跟着反转；surface 才是两个主题下都同向（浅色主题浅、深色主题深）的次级表面色。 */
+::-webkit-scrollbar-track {
+  background: rgb(var(--v-theme-surface));
+}
+
+::-webkit-scrollbar-thumb {
+  --thumb-paint: color-mix(in srgb, var(--scrollbar-thumb-color, #999) 45%, transparent);
+  border-radius: 999px;
+  // 滑块随内容动态伸缩，但最长不超过视口的 40%（背景层截短：Chrome 不支持 thumb 的 max-length）
+  background-image: linear-gradient(var(--thumb-paint), var(--thumb-paint));
+  background-repeat: no-repeat;
+
+  &:hover {
+    --thumb-paint: color-mix(in srgb, var(--scrollbar-thumb-color, #999) 75%, transparent);
+  }
+
+  // 纵向：最长 40vh
+  &:vertical {
+    background-size: 100% 40vh;
+  }
+
+  // 横向：最长 20vw（代码块只溢出几十 px 时，原生 thumb 会几乎占满整条轨道）
+  &:horizontal {
+    background-size: 20vw 100%;
+  }
+}
+
+/* ========== 文章封面图 & 骨架屏 统一圆角（组件内通过 var() 引用，改这里即可全局生效） ========== */
+:root {
+  --article-cover-radius: 2px;
+}
+
+/* ========== 首页列表卡片标题字号：唯一旋钮（改字号只动 --article-title-fs） ==========
+   骨架骨高/间距/留白、xs 标题盒高都由它 calc 派生；行高需 ≥ 字号 × 1.25，否则切降部 */
+:root {
+  --article-title-fs: 18px;   /* xs 档见下方媒体查询；原 16px */
+  --article-title-lh: 26px;
+  --article-title-lift: 4px;  /* 整行上移，让首行墨迹顶落在封面顶边上 */
+}
+
+@media (max-width: 599.98px) {
+  :root {
+    --article-title-fs: 16px; /* 原 14px */
+    --article-title-lh: 20px;
+    --article-title-lift: 2px;
+  }
+}
+
+/* ========== 图片懒加载占位：浅灰背景（骨架屏视觉），替代 coverRect 静态图 ========== */
+.lazy-img {
+  background-color: rgba(var(--v-theme-on-surface), 0.08);
+}
+.lazy-img .v-img__img--preload {
+  opacity: 0;
+}
+
+/* ========== 小图标按钮：缩小悬浮高亮与点击波纹（40px 按钮内只亮 28px 圆，贴近图标） ========== */
+/* 验证码刷新按钮为 x-small（32px）且自带定位，排除以免 6px 偏移错位其悬浮圆 */
+.app-icon-btn:not(.captcha-refresh):not(.captcha-click-refresh) {
+  .v-btn__overlay,
+  .v-ripple__container {
+    width: 28px;
+    height: 28px;
+    top: 6px;
+    left: 6px;
+  }
+}
+
+/* ========== 主题切换防闪：卡片 / 按钮底色不参与过渡 ==========
+   Vuetify 的 .v-card / .v-btn 把 background 放进了 transition-property
+   （$card-transition-property: box-shadow, opacity, background；
+    $button-transition-property: box-shadow, transform, opacity, background），
+   background 会展开成全部 background-* 长属性，包含 background-color。
+   而 .v-application 的底色没有过渡：切主题时页面底色先瞬切完，卡片却要把
+   rgb(var(--v-theme-surface)) 慢慢渐变 0.28s，在已经切换完的页面上留下一片亮卡片。
+   这里只把 background 从过渡属性里摘掉，其余属性按各自默认值保留。
+   !important 必要：vite-plugin-vuetify 的组件 CSS 是按组件注入的，排在全局表之后，
+   同特异性下靠顺序赢不了。 */
+.v-card {
+  transition-property: box-shadow, opacity !important;
+}
+.v-btn {
+  transition-property: box-shadow, transform, opacity !important;
+}
+
+/* ========== 空状态（.custom-empty-state）：字号 / 图标 / 间距统一在此定义 ==========
+   使用方只需在自己的根元素上设置 --empty-state-scale（移动端 0.8，桌面 1），
+   同一份规则同时覆盖组件自带 markup 与父组件经插槽传入的 markup，避免各写一份导致漂移。
+   !important 必要：v-empty-state 默认 icon size 96 会内联 height/width，
+   且 .v-empty-state--mobile 变体与本规则特异性相同，靠顺序不可靠。 */
+.custom-empty-state {
+  /* Vuetify 默认 0，图标盒底边紧贴标题 */
+  .v-empty-state__media {
+    margin-bottom: calc(5px * var(--empty-state-scale, 1)) !important;
+  }
+
+  .v-empty-state__headline {
+    font-size: calc(1.125rem * var(--empty-state-scale, 1)) !important;
+    font-weight: 500;
+    /* Vuetify 默认仅 8px，标题与描述挨得过近 */
+    margin-bottom: calc(30px * var(--empty-state-scale, 1)) !important;
+  }
+
+  .v-empty-state__text {
+    font-size: calc(0.875rem * var(--empty-state-scale, 1)) !important;
+  }
+
+  .v-icon {
+    font-size: calc(60px * var(--empty-state-scale, 1)) !important;
+    height: calc(60px * var(--empty-state-scale, 1)) !important;
+    width: calc(60px * var(--empty-state-scale, 1)) !important;
+  }
+}

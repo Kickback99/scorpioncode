@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <!-- 自托管字体预加载：与 CSS/JS 并行下载，赶在正文渲染前就位。只预热首屏第一帧用到的两档
+         （400 正文、500 卡片标题与按钮），600/700 与 JetBrains Mono 随 CSS 按需加载，不占首屏带宽。
+         crossorigin 必带（字体请求走 CORS，缺了浏览器会丢弃预加载）；href 由 Vite 构建时改写为哈希地址。 -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin="anonymous" href="/src/assets/fonts/Inter-Regular.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin="anonymous" href="/src/assets/fonts/Inter-Medium.woff2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>%VITE_APP_TITLE%</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- 移动端抽屉 Teleport 目标：必须在 Vue 挂载之前就存在于文档中（AppHeaderMobile 挂载时 Teleport 才能解析到） -->
+    <div class="mobile-drawer-portal"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
