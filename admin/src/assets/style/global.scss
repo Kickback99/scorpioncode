@@ -1,0 +1,66 @@
+// 公告图片
+$notice-img: 350px;
+
+// 左侧导航背景栏颜色
+$menu-background:slateblue;
+$menu-color:white;
+
+// 左侧菜单折叠时的宽度
+$menu-min-width:60px;
+
+// 左侧菜单logo高度设置
+$base-menu-logo-height:60px;
+
+// 左侧菜单logo图标与标题间距
+$base-logo-gap:10px;
+
+// 登录页背景
+$login-bg:url("../assets/images/wallhaven-g75r7d.jpg");
+
+/* :export {
+    menuTextColor:$menu-color;
+} */
+
+// v-md-editor
+// 文章预览视图的code标签，如``，
+$code-color:var(--el-text-color-regular);
+
+// css变量
+:root{
+    --text:#FFFFFF;
+}
+
+.message-right-top {
+  inset: 30px 5px auto auto !important;  // top:20px, right:0, left:auto, bottom:auto
+  margin: 0 !important;
+  transform: none !important;
+}
+
+
+// flex函数
+@mixin flex($row:flex-start, $col:stretch, $multiCol:stretch) {
+    display: flex;
+    justify-content:$row;
+    align-items: $col;
+    align-content:$multiCol
+}
+
+@mixin ellipsis(){
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin line-clamp-3(){
+	display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+@mixin line-clamp-3($num){
+	display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $num;
+    overflow: hidden;
+}
