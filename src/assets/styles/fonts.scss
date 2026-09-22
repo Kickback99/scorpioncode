@@ -1,0 +1,48 @@
+// ============================================================
+// 自托管字体（OFL 1.1 授权，原文见 src/assets/fonts/LICENSE-*.txt）
+//   Inter 400 / 500 / 600 / 700 —— 全站拉丁：正文 / 卡片标题与按钮 / 各级标题 / 加粗
+//   JetBrains Mono 400         —— 文章 Markdown 的代码块与行内代码（连字见 main.scss）
+// 中文两者都不覆盖，由 variables.scss 的 $body-font-family 交给系统字体；
+// font-display: swap 保证正文始终可见，且 swap 只影响拉丁字形。
+// 加载时机：Inter 400 / 500 由 index.html 预加载，600 / 700 随 CSS 并行下载；JM 不预加载。
+// ============================================================
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/Inter-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/Inter-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/Inter-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/Inter-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/JetBrainsMono-Regular.woff2') format('woff2');
+}
