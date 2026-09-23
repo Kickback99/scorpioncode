@@ -1,6 +1,8 @@
 html, body {
+  /* 防页面横向溢出只需 overflow-x: clip。不要加 touch-action: pan-y：
+     它的交集会一路算到视口，连带禁掉捏合缩放（Android Chrome 上整页无法放大），
+     而代码块等内部横滚容器本就不受它约束。 */
   overflow-x: clip;
-  touch-action: pan-y;
 }
 
 /* fade-slide */
@@ -161,5 +163,24 @@ html, body {
     font-size: calc(60px * var(--empty-state-scale, 1)) !important;
     height: calc(60px * var(--empty-state-scale, 1)) !important;
     width: calc(60px * var(--empty-state-scale, 1)) !important;
+  }
+}
+
+/* ========== iOS 输入框字号下限 16px ==========
+   iOS 聚焦 <16px 输入框会自动放大整页且不缩回；阈值硬编码在 iOS 内、iOS 10+ 又忽略 user-scalable，只能靠字号消解。
+   用 -webkit-touch-callout 定位 iOS（Blink 实测 false，Android 天然不命中）；不用触摸媒体查询，那会漏掉接鼠标的 iPad。
+   代价是桌面 Safari 同为 WebKit、会一并命中，仅字号变化无副作用。
+   !important 必要：vite-plugin-vuetify 的组件 CSS 排在全局表之后，同特异性下靠顺序赢不了。 */
+@supports (-webkit-touch-callout: none) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  // 组件内 :deep(.v-field__input) 会编译成 [data-v-xxx] .v-field__input（特异性 0,2,0），
+  // 如 AppBreadcrumb 的 12px，单靠元素选择器压不过，需三段类名
+  .v-input .v-field .v-field__input {
+    font-size: 16px !important;
   }
 }
