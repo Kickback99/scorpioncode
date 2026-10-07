@@ -1,0 +1,192 @@
+<!-- components/ReplyInput.vue -->
+<template>
+  <!-- ===== 回复输入框 ===== -->
+  <div class="reply-input-wrapper" :class="{ 'child-reply-wrapper': isChildReply }">
+    <div class="reply-input-container">
+
+      <div class="reply-input-flex">
+        <v-textarea
+          v-model="internalContent"
+          ref="replyInputRef"
+          :placeholder="`回复 ${targetUsername || '匿名用户'}...`"
+          rows="2"
+          variant="outlined"
+          density="compact"
+          hide-details
+          counter
+          maxlength="500"
+          autofocus
+          @keydown.enter.ctrl="handleSubmit"
+          class="reply-textarea"
+        ></v-textarea>
+        <div class="reply-actions">
+          <AppEmojiPicker v-model="internalContent" :input-el="replyInputRef" />
+          <v-btn
+            class="ml-auto"
+            size="x-small"
+            variant="text"
+            @click="handleCancel"
+          >
+            取消
+          </v-btn>
+          <v-btn
+            size="x-small"
+            color="primary"
+            variant="flat"
+            :loading="loading"
+            :disabled="!internalContent.trim()"
+            @click="handleSubmit"
+          >
+            回复
+          </v-btn>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue'
+import AppEmojiPicker from './AppEmojiPicker.vue'
+
+// ============================================================
+// 数据
+// ============================================================
+const props = defineProps({
+  // 目标用户名
+  targetUsername: {
+    type: String,
+    default: ''
+  },
+  // 是否为子评论回复
+  isChildReply: {
+    type: Boolean,
+    default: false
+  },
+  // 加载状态
+  loading: {
+    type: Boolean,
+    default: false
+  },
+  // 外部控制的内容（可选）
+  content: {
+    type: String,
+    default: ''
+  }
+})
+
+const emit = defineEmits(['submit', 'cancel', 'update:content'])
+
+// 内部内容状态
+const internalContent = ref(props.content)
+
+// 仅用于交给 AppEmojiPicker 读光标位置与 maxlength，本文件不碰表情逻辑
+const replyInputRef = ref(null)
+
+// ============================================================
+// 内容监听
+// ============================================================
+// 监听外部内容变化
+watch(() => props.content, (newVal) => {
+  internalContent.value = newVal
+})
+
+// 监听内部内容变化，同步到外部
+watch(internalContent, (newVal) => {
+  emit('update:content', newVal)
+})
+
+// ============================================================
+// 交互处理
+// ============================================================
+// 提交回复
+const handleSubmit = () => {
+  if (!internalContent.value.trim()) return
+  emit('submit', internalContent.value)
+}
+
+// 取消回复
+const handleCancel = () => {
+  emit('cancel')
+}
+</script>
+
+<style scoped>
+/* ============================================================
+   输入框主体
+   ============================================================ */
+.reply-input-wrapper {
+  margin: 8px 16px 8px 56px;
+  animation: slideDown 0.2s ease-out;
+}
+
+.child-reply-wrapper {
+  margin-left: 56px !important;
+}
+
+.reply-input-container {
+  display: flex;
+  gap: 12px;
+  padding: 0 12px;
+  background-color: rgba(var(--v-theme-surface-variant), 0.3);
+  border-radius: 12px;
+  /* border-left: 3px solid rgb(var(--v-theme-primary)); */
+}
+
+.reply-avatar {
+  flex-shrink: 0;
+  background-color: rgba(var(--v-theme-primary), 0.1);
+}
+
+.reply-input-flex {
+  flex: 1;
+}
+
+/* ============================================================
+   文本域与操作按钮
+   ============================================================ */
+.reply-textarea {
+  font-size: 0.875rem;
+}
+
+.reply-textarea :deep(textarea) {
+  font-size: 0.875rem;
+  padding: 8px 12px;
+}
+
+.reply-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* ============================================================
+   展开动画
+   ============================================================ */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   移动端适配
+   ============================================================ */
+@media (max-width: 600px) {
+  .reply-input-wrapper {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+  
+  .child-reply-wrapper {
+    margin-left: 8px !important;
+  }
+}
+</style>
