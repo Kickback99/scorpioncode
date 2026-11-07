@@ -1,0 +1,65 @@
+// ============================================================
+// 顶栏按钮交互动效
+// 覆盖 ToolBar 的 Refresh / FullScreen / Setting 与 NoticeBell 铃铛
+// ============================================================
+
+// ---------- 轻动效：悬浮先收缩、再快速弹回原大小 ----------
+// 与 .el-button 一起限定以抬高特异性：element-plus 组件样式是按需注入的，
+// 可能晚于本文件加载，只用单类会被它的 transition 顶掉
+.el-button.toolbar-btn-anim {
+  // 必须显式列全属性：EP 默认是 `transition: .1s`（all 的简写），
+  // 若只写 transform，会把背景/边框/文字的过渡一并替换掉，悬浮变成瞬时变色
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+
+  // 每次移入触发一次；鼠标在按钮内移动不会重播（:hover 持续为真）
+  &:hover {
+    animation: btn-shrink-back 0.3s ease-in-out;
+  }
+}
+
+@keyframes btn-shrink-back {
+  0% {
+    transform: scale(1);
+  }
+  // 峰值偏后：收缩占 55%，回弹占剩余 45%，回弹更快
+  55% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// ---------- 铃铛摇摆：绕图标顶边左右摆动 ----------
+@keyframes bell-swing {
+  0% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(13deg);
+  }
+  30% {
+    transform: rotate(-11deg);
+  }
+  45% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-6deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+// 弹窗内容被 teleport 到 body，不会误命中 wrapper 内的 .el-icon
+.notice-bell-wrapper:hover .el-icon {
+  transform-origin: top center;
+  animation: bell-swing 1.2s ease-in-out;
+}
